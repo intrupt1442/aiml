@@ -1,0 +1,61 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt 
+
+data=pd.read_csv('headbrain.csv')
+print(data.shape)
+data.head()
+
+
+
+x=data['Head Size(cm^3)'].values
+y=data['Brain Weight(grams)'].values
+mean_x=np.mean(x)
+mean_y=np.mean(y)
+print("mean of x:",mean_x)
+print("mean of y:",mean_y)
+
+
+
+n=len(x)
+print(n)
+
+
+
+
+a=0
+b=0
+for i in range(n):
+    a+=(x[i]-mean_x)*(y[i]-mean_y)
+    b+=(x[i]-mean_x)**2
+    b1=a/b
+    b0=mean_y-(b1*mean_x)
+print("Coefficient:")
+print(b0,b1)
+
+
+
+
+max_x=np.max(x)+100
+min_x=np.min(x)-100
+x1=np.linspace(min_x,max_x,1000)
+y1=b0+b1*x1
+plt.plot(x1,y1,color='#58b970',label='regression line')
+plt.scatter(x,y,color='#ef5423',label='scatter pot')
+plt.xlabel('cm^3')
+plt.ylabel('grams')
+plt.legend()
+plt.show()
+
+
+
+tss=0
+rss=0
+for i in range(n):
+    pred_y=b0+b1*x[i]
+    tss+=(y[i]-mean_y)**2
+    rss+=(y[i]-pred_y)**2
+    r2=(tss-rss)/tss
+    
+print("R2 score:")
+print(r2)

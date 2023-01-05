@@ -1,0 +1,23 @@
+import numpy as np
+import pandas as pd 
+
+data=pd.read_csv('seeds-less-rows.csv')
+print(data.shape)
+data.head()
+
+
+varieties=list(data.pop('grain_variety'))
+sample=data.values
+
+from scipy.cluster.hierarchy import linkage, dendrogram
+import matplotlib.pyplot as plt
+merging = linkage(sample,method='complete')
+dendrogram(merging,labels=varieties,leaf_rotation=90,leaf_font_size=8)
+plt.plot()
+
+
+from scipy.cluster.hierarchy import fcluster
+labels=fcluster(merging,6,criterion='distance')
+df=pd.DataFrame({'labels':labels,'varieties':varieties})
+ct=pd.crosstab(df['labels'],df['varieties'])
+ct
